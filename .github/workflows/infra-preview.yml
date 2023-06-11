@@ -16,6 +16,8 @@ permissions:
 env:
   TF_VERSION : 1.2.8
   AWS_REAZION : ap-northeast-1
+  PROJECT : test
+  ENVIRONMENT : dev
 
 defaults:
   run:
@@ -47,3 +49,13 @@ jobs:
       - name: Terraform validate
         run: | 
             terraform validate -no-color 
+      - name: Terraform plan
+        run: | 
+            terraform plan \
+              -var 'project= ${{env.PROJECT}}' \
+              -var 'eenvironment= ${{env.ENVIRONMENT}}' \
+              -var 'username= ${{secrets.MYSQL_USERNAME}}' \
+              -var 'password= ${{secrets.MYSQL_PASSWORD}}' \
+              -input=false \
+              -no-color \
+              -detailed-exitcode
