@@ -13,10 +13,22 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  TF_VERSION : 1.2.8
+
+defaults:
+  run:
+    shell : bash
+    working-directory : "10_infra/"
+
 jobs:
   preview:
     name: "preview"
     runs-on: ubuntu-latest
     steps:
-      - run:
-         echo "hellowworld"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{env.TF_VERSION}}
