@@ -119,3 +119,46 @@ jobs:
       - name: Terraform init
         run: | 
             terraform init -no-color
+      - name : Terraform applay
+        id : applay
+        run : |
+            terraform applay \
+            -var 'project= ${{env.PROJECT}}' \
+            -var 'environment= ${{env.ENVIRONMENT}}' \
+            -var 'username= ${{secrets.MYSQL_USERNAME}}' \
+            -var 'password= ${{secrets.MYSQL_PASSWORD}}' \
+            -input=false \
+            -no-color \
+            # -auto-approve
+      - name : Slack Notify
+        if : always ()
+        uses: slackapi/slack-github-action@v1.22.0
+        with:
+          channel-id: "C05CNE98E0Y"
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#0068B7",
+                  "blocks": [
+                    {
+                      "type": "header",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Runnner Finished ${{steps.applay.outcome}}",
+                        "emoji": true
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "${{ github.server_url }}/${{github.repository}}/actions/runs/${{github.run_id}}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }} 
