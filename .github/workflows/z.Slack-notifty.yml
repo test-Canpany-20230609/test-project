@@ -1,42 +1,41 @@
-name : slack-notify
+name: "z Slack notify"
 
+on:
+  workflow_dispatch:
 
-on : 
-    workflow_dispatch :
-
-jobs : 
-    otify :
-        name : Slack-notify
-        runs-on: ubuntu-latest
-        steps:
-          - name: slack-Notify
-            uses : slackapi/slack-github-action@v1.24.0
-            with :
-                channel-id: 'C05CNE98E0Y'
-                payload : |
+jobs:
+  notify:
+    name: Slack notify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack notify
+        uses: slackapi/slack-github-action@v1.22.0
+        with:
+          channel-id: "C05CNE98E0Y"
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#0068B7",
+                  "blocks": [
                     {
-                    "attachments": [
-                        {
-                            "blocks": [
-                                {
-                                    "type": "section",
-                                    "text": {
-                                        "type": "mrkdwn",
-                                        "text": "message header"
-                                    }
-                                },
-                                {
-                                    "type": "header",
-                                    "text": {
-                                        "type": "plain_text",
-                                        "text": "hellow world",
-                                        "emoji": true
-                                    }
-                                }
-                            ]
-                        }
-                    ]
+                      "type": "header",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Message Header",
+                        "emoji": true
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "Hello World :ghost:"
+                      }
                     }
-                env : 
-                SLACK_BOT_TOKEN: ${{secrets.SLACK_BOT_TOKEN}}
-
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
