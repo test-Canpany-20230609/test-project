@@ -98,7 +98,7 @@ jobs:
   deploy : 
     name : "Deploy"
     needs: preview
-    if : needs.preview.outputs.TF_PLAN_EXITCODE == 2
+    if : needs.preview.outputs.TF_PLAN_EXITCODE == 1
     environment : prpduction
     runs-on : ubuntu-latest
     steps:
